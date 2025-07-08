@@ -7,7 +7,7 @@ import java.util.Map;
  * Gerenciador de dependências de módulos.
  * Permite adicionar módulos, definir dependências entre eles e listar os módulos cadastrados.
  *
- * @author Bruno Campos
+ * @author Bruno Campos, Grazielly Barros
  * @version 1.0
  * @since 04/07/2025
  */
@@ -65,4 +65,74 @@ public class GerenciadorDependencias {
             System.out.println("- " + chave);
         }
     }
+
+    // === grazy ===
+    /**
+     * Exibe a árvore de dependências a partir dos módulos raiz.
+     */
+    public void visualizarArvore() {
+        System.out.println("\nÁrvore de Dependências:");
+        boolean encontrouRaiz = false;
+        for (Modulo modulo : modulos.values()) {
+            if (modulo.getPai() == null) {
+                encontrouRaiz = true;
+                exibirArvore(modulo, 0);
+            }
+        }
+        if (!encontrouRaiz) {
+            System.out.println("(Nenhum módulo raiz encontrado)");
+        }
+    }
+
+    private void exibirArvore(Modulo modulo, int nivel) {
+        System.out.println("  ".repeat(nivel) + "- " + modulo.getIdentificador());
+        for (Modulo dependente : modulo.getDependentes()) {
+            exibirArvore(dependente, nivel + 1);
+        }
+    }
+
+    /**
+     * Busca e exibe informações de um módulo pelo identificador.
+     * @param id Identificador no formato "nome:versao"
+     */
+    public void buscarModulo(String id) {
+        Modulo modulo = modulos.get(id);
+        if (modulo == null) {
+            System.out.println("Módulo não encontrado: " + id);
+            return;
+        }
+        System.out.println("Módulo: " + modulo.getIdentificador());
+        System.out.println("Pai: " + (modulo.getPai() != null ? modulo.getPai().getIdentificador() : "Nenhum"));
+        System.out.println("Dependentes:");
+        if (modulo.getDependentes().isEmpty()) {
+            System.out.println("  (Nenhum)");
+        } else {
+            for (Modulo dep : modulo.getDependentes()) {
+                System.out.println("  - " + dep.getIdentificador());
+            }
+        }
+    }
+
+    /**
+     * Remove um módulo do gerenciador e atualiza as dependências.
+     * @param id Identificador do módulo a ser removido.
+     */
+    public void removerModulo(String id) {
+        Modulo modulo = modulos.get(id);
+        if (modulo == null) {
+            System.out.println("Módulo não encontrado: " + id);
+            return;
+        }
+        // Remove referência do pai
+        if (modulo.getPai() != null) {
+            modulo.getPai().removerDependente(modulo);
+        }
+        // Remove referência dos dependentes
+        for (Modulo dependente : new java.util.ArrayList<>(modulo.getDependentes())) {
+            modulo.removerDependente(dependente);
+        }
+        modulos.remove(id);
+        System.out.println("Módulo removido: " + id);
+    }
+    // === grazy ===
 }
