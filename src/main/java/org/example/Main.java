@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.model.GerenciadorDependencias;
-
 import java.util.Scanner;
+
+import org.example.model.GerenciadorDependencias;
 
 public class Main {
     public static void main(String[] args) {
@@ -36,7 +36,23 @@ public class Main {
                 case "listar":
                     gerenciador.listarModulos();
                     break;
-
+                // === grazy ===
+                case "visualizar":
+                    gerenciador.visualizarArvore();
+                    break;
+                case "buscar":
+                    if (partes.length == 2)
+                        gerenciador.buscarModulo(partes[1]);
+                    else
+                        System.out.println("Uso: buscar <nome:versao>");
+                    break;
+                case "remover":
+                    if (partes.length == 2)
+                        gerenciador.removerModulo(partes[1]);
+                    else
+                        System.out.println("Uso: remover <nome:versao>");
+                    break;
+                // === grazy ===
                 default:
                     System.out.println("Comando desconhecido.");
             }
