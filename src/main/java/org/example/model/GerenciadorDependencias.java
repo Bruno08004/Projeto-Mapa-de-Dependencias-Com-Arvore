@@ -1,6 +1,8 @@
 package org.example.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,8 +39,10 @@ public class GerenciadorDependencias {
      *
      * @param idFilho Identificador do módulo filho (dependente).
      * @param idPai   Identificador do módulo pai (dependência).
+     * @param core
+     * @param s
      */
-    public void adicionarDependencia(String idFilho, String idPai) {
+    public void adicionarDependencia(String idFilho, String idPai, String core, String s) {
         Modulo filho = modulos.get(idFilho);
         Modulo pai = modulos.get(idPai);
 
@@ -123,16 +127,34 @@ public class GerenciadorDependencias {
             System.out.println("Módulo não encontrado: " + id);
             return;
         }
+        // Remove recursivamente todos os dependentes do módulo
+        for (Modulo dependente : new ArrayList<>(modulo.getDependentes())) {
+            removerModulo(dependente.getIdentificador());
+        }
         // Remove referência do pai
         if (modulo.getPai() != null) {
             modulo.getPai().removerDependente(modulo);
-        }
-        // Remove referência dos dependentes
-        for (Modulo dependente : new java.util.ArrayList<>(modulo.getDependentes())) {
-            modulo.removerDependente(dependente);
         }
         modulos.remove(id);
         System.out.println("Módulo removido: " + id);
     }
     // === grazy ===
+
+    public void imprimirCaminhosDeBuild() {
+        for (Modulo modulo : modulos.values()) {
+            if (modulo.getDependentes().isEmpty()) {
+                imprimirCaminho(modulo);
+            }
+        }
+    }
+
+    private void imprimirCaminho(Modulo modulo) {
+        List<String> caminho = new ArrayList<>();
+        while (modulo != null) {
+            caminho.add(0, modulo.getNome() + ":" + modulo.getVersao());
+            modulo = modulo.getPai();
+        }
+        System.out.println(String.join(" -> ", caminho));
+    }
+
 }
