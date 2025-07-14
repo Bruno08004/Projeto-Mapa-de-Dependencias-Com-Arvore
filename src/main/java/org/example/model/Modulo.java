@@ -8,7 +8,14 @@ import java.util.List;
  * Cada módulo pode ter um único módulo pai (do qual depende diretamente)
  * e múltiplos módulos filhos (que dependem diretamente dele).
  *
- * @author João Gabriel
+ * @author Ana Luiza Freitas Brito Siqueira
+ * @author Bruno Campos Penha
+ * @author Grazielly de Sousa Barros
+ * @author João Gabriel Oliveira Magalhães
+ * @author João Vitor Moreira Lemos
+ * @author Robert Alves Guimarães
+ * @author Vinicius D’Oliveira Rocha
+ * @author Emanuel Pinto Nogueira
  * @version 1.0
  * @since 03/07/2025
  */
